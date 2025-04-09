@@ -107,7 +107,81 @@ function makeMIDIKeyboard(device) {
     mdiv.removeChild(document.getElementById("no-midi-label"));
 
     const midiNotes = [1, 2, 3];
+    midiNotes.forEach(note => {
+        const key = document.createElement("div");
+        const label = document.createElement("p");
+        label.textContent = note;
+        key.appendChild(label);
+        key.addEventListener("pointerdown", () => {
+            let midiChannel = 0;
+
+            // Format a MIDI message paylaod, this constructs a MIDI on event
+            let noteOnMessage = [
+                144 + midiChannel, // Code for a note on: 10010000 & midi channel (0-15)
+                note, // MIDI Note
+                100 // MIDI Velocity
+            ];
+        
+            let noteOffMessage = [
+                128 + midiChannel, // Code for a note off: 10000000 & midi channel (0-15)
+                note, // MIDI Note
+                0 // MIDI Velocity
+            ];
+        
+            // Including rnbo.min.js (or the unminified rnbo.js) will add the RNBO object
+            // to the global namespace. This includes the TimeNow constant as well as
+            // the MIDIEvent constructor.
+            let midiPort = 0;
+            let noteDurationMs = 250;
+        
+            // When scheduling an event to occur in the future, use the current audio context time
+            // multiplied by 1000 (converting seconds to milliseconds) for now.
+            let noteOnEvent = new RNBO.MIDIEvent(device.context.currentTime * 1000, midiPort, noteOnMessage);
+            let noteOffEvent = new RNBO.MIDIEvent(device.context.currentTime * 1000 + noteDurationMs, midiPort, noteOffMessage);
+        
+            device.scheduleEvent(noteOnEvent);
+            device.scheduleEvent(noteOffEvent);
+
+            key.classList.add("clicked");
+            
     const midiNotes = [4, 5, 6];
+    midiNotes.forEach(note => {
+        const key = document.createElement("div");
+        const label = document.createElement("p");
+        label.textContent = note;
+        key.appendChild(label);
+        key.addEventListener("pointerdown", () => {
+            let midiChannel = 0;
+
+            // Format a MIDI message paylaod, this constructs a MIDI on event
+            let noteOnMessage = [
+                144 + midiChannel, // Code for a note on: 10010000 & midi channel (0-15)
+                note, // MIDI Note
+                100 // MIDI Velocity
+            ];
+        
+            let noteOffMessage = [
+                128 + midiChannel, // Code for a note off: 10000000 & midi channel (0-15)
+                note, // MIDI Note
+                0 // MIDI Velocity
+            ];
+        
+            // Including rnbo.min.js (or the unminified rnbo.js) will add the RNBO object
+            // to the global namespace. This includes the TimeNow constant as well as
+            // the MIDIEvent constructor.
+            let midiPort = 0;
+            let noteDurationMs = 250;
+        
+            // When scheduling an event to occur in the future, use the current audio context time
+            // multiplied by 1000 (converting seconds to milliseconds) for now.
+            let noteOnEvent = new RNBO.MIDIEvent(device.context.currentTime * 1000, midiPort, noteOnMessage);
+            let noteOffEvent = new RNBO.MIDIEvent(device.context.currentTime * 1000 + noteDurationMs, midiPort, noteOffMessage);
+        
+            device.scheduleEvent(noteOnEvent);
+            device.scheduleEvent(noteOffEvent);
+
+            key.classList.add("clicked");
+
     const midiNotes = [7, 8, 9];
     midiNotes.forEach(note => {
         const key = document.createElement("div");
@@ -145,6 +219,7 @@ function makeMIDIKeyboard(device) {
             device.scheduleEvent(noteOffEvent);
 
             key.classList.add("clicked");
+            
         });
 
         key.addEventListener("pointerup", () => key.classList.remove("clicked"));
